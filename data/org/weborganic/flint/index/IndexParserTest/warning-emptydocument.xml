@@ -1,0 +1,15 @@
+<?xml version='1.0' encoding='utf-8'?>
+<!DOCTYPE documents PUBLIC "-//Weborganic//DTD::Flint Index Documents 2.0//EN"
+                           "http://weborganic.org/schema/flint/index-documents-2.0.dtd">
+<!-- 
+  A Flint Index Document 2.0 for testing.
+
+  This file contains an empty document which should not be indexed.
+-->
+<documents version="2.0">
+  <document/>
+  <document>
+    <field store="yes" index="analyzed" name="type">xml</field>
+    <field store="yes" index="analyzed" name="author">author2</field>
+  </document>
+</documents>

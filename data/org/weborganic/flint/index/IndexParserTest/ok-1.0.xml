@@ -1,0 +1,32 @@
+<?xml version='1.0' encoding='utf-8'?>
+<!DOCTYPE documents PUBLIC "-//Weborganic//DTD::Flint Index Documents 1.0//EN"
+                           "http://weborganic.org/schema/flint/index-documents-1.0.dtd">
+<!-- 
+  A complete Flint Index Document 1.0 for testing.
+
+  This files should contain as many use cases as possible and which do not yield any errors.
+
+  Errors test cases should be treated separately.
+-->
+<documents>
+  <document>
+    <!-- Each combination of fields -->
+    <field store="no"       index="no-norms"     name="no">unstored nonorms data</field>
+    <field store="no"       index="tokenised"    name="nt">unstored tokenized data</field>
+    <field store="no"       index="un-tokenized" name="nu">unstored untokenized data</field>
+    <field store="yes"      index="no"           name="yn">stored unindexed data</field>
+    <field store="yes"      index="no-norms"     name="yo">stored nonorms data</field>
+    <field store="yes"      index="tokenised"    name="yt">stored tokenized data</field>
+    <field store="yes"      index="un-tokenized" name="yu">stored untokenized data</field>
+    <field store="compress" index="no"           name="cn">compressed unindexed data</field>
+    <field store="compress" index="no-norms"     name="co">compressed nonorms data</field>
+    <field store="compress" index="tokenised"    name="ct">compressed tokenised data</field>
+    <field store="compress" index="un-tokenized" name="cu">compressed untokenised data</field>
+
+    <!-- Other fields for testing -->
+    <field store="yes" index="tokenised" name="author">author1</field>
+  </document>
+  <document>
+    <field store="yes" index="tokenised" name="author">author2</field>
+  </document>
+</documents>
