@@ -1,0 +1,25 @@
+<?xml version='1.0' encoding='utf-8'?>
+<!DOCTYPE documents PUBLIC "-//Weborganic//DTD::Flint Index Documents 2.0//EN"
+                           "http://weborganic.org/schema/flint/index-documents-2.0.dtd">
+<!-- 
+  A complete Flint Index Document 2.0 for testing.
+
+  This files should contain as many use cases as possible and which do not yield any errors.
+
+  Errors test cases should be treated separately.
+-->
+<documents version="2.0">
+  <document>
+    <field store="yes" index="analyzed" name="type">xml</field>
+    <field store="yes" index="analyzed" name="author">author1</field>
+    <field store="no"  index="analyzed" name="data1">some data</field>
+    <field store="yes" index="not-analyzed" name="data2">some data</field>
+    <field store="yes" index="not-analyzed-no-norms" name="data3">some data</field>
+    <field store="yes" index="no" name="data4">some data</field>
+    <field store="yes" index="analyzed-no-norms" name="data5">some data</field>
+  </document>
+  <document>
+    <field store="yes" index="analyzed" name="type">xml</field>
+    <field store="yes" index="analyzed" name="author">author2</field>
+  </document>
+</documents>
