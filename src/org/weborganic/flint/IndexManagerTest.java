@@ -24,7 +24,7 @@ import org.apache.lucene.store.RAMDirectory;
 import org.apache.lucene.util.Version;
 import org.junit.Before;
 import org.junit.Test;
-import org.weborganic.flint.IndexManager.Priority;
+import org.weborganic.flint.IndexJob.Priority;
 import org.weborganic.flint.content.Content;
 import org.weborganic.flint.content.ContentFetcher;
 import org.weborganic.flint.content.ContentId;
@@ -432,7 +432,7 @@ public class IndexManagerTest {
     query1.add(new SearchTermParameter("content", "search1"));
     GenericSearchQuery query4 = new GenericSearchQuery();
     query4.add(new SearchTermParameter("content", "search4"));
-    CombinedSearchQuery combined = new CombinedSearchQuery(query1, query4, Sort.INDEXORDER);
+    CombinedSearchQuery combined = new CombinedSearchQuery(query1, query4, null);
     SearchResults results = this.manager.query(index, combined);
     // make sure the order is correct
     assertEquals(2, results.getScoreDoc().length);
