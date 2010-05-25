@@ -1,0 +1,26 @@
+<?xml version='1.0' encoding='utf-8'?>
+<!DOCTYPE root
+  PUBLIC "-//Weborganic//DTD::Flint Index Documents Compatibility//EN" "http://weborganic.org/schema/flint/index-documents-compatibility.dtd">
+<!-- 
+  A complete Flint Index Document Compatibility for testing.
+
+  This file should contain as many use cases as possible and which do not yield any errors.
+
+  Errors test cases should be treated separately.
+-->
+<root>
+  <document>
+    <field type="keyword" name="type">xml</field>
+    <field type="keyword" name="author">author1</field>
+    <field type="stored" name="data1">some data</field>
+    <field type="text" name="data2">some data</field>
+    <field type="unstored" name="data3">some data</field>
+    <field type="unindexed" name="data4">some data</field>
+    <field type="system" name="data5">some data</field>
+    <field type="keyword" name="data6" comma-separated-value="true">,value1,value2,value3,</field>
+  </document>
+  <fragment>
+    <field type="keyword" name="type">xml</field>
+    <field type="stored" name="author">author2</field>
+  </fragment>
+</root>

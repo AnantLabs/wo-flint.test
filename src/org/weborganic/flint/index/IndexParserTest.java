@@ -55,8 +55,10 @@ public class IndexParserTest {
     List<Document> docs = this.parser.process(new File(DATA, "ok-1.0.xml"));
     assertEquals(2, docs.size());
     // Check document order 
+    assertEquals(15, docs.get(0).getFields().size());
     assertNotNull(docs.get(0).getField("author"));
     assertEquals("author1", docs.get(0).getField("author").stringValue());
+    assertEquals(1, docs.get(1).getFields().size());
     assertNotNull(docs.get(1).getField("author"));
     assertEquals("author2", docs.get(1).getField("author").stringValue());
 
@@ -90,6 +92,29 @@ public class IndexParserTest {
     assertEquals(false, docs.get(0).getField("data4").isIndexed());
     assertEquals(true, docs.get(0).getField("data5").isTokenized());
     assertEquals(true, docs.get(0).getField("data5").getOmitNorms());
+  }
+
+  @Test
+  public void testProcess_OK_Compatibility() throws FileNotFoundException, IndexException {
+    List<Document> docs = this.parser.process(new File(DATA, "ok-compatibility.xml"));
+    assertEquals(2, docs.size());
+    assertEquals("author1", docs.get(0).getField("author").stringValue());
+    assertEquals("author2", docs.get(1).getField("author").stringValue());
+    Field type = docs.get(0).getField("type");
+    assertEquals(true, type.isIndexed());
+    assertEquals(true, type.isStored());
+    assertEquals(true, type.isTokenized());
+    assertEquals(false, type.getOmitNorms());
+    assertEquals(false, docs.get(0).getField("data1").isStored());
+    assertEquals(true, docs.get(0).getField("data2").isTokenized());
+    assertEquals(true, docs.get(0).getField("data2").getOmitNorms());
+    assertEquals(false, docs.get(0).getField("data3").isStored());
+    assertEquals(true, docs.get(0).getField("data3").getOmitNorms());
+    assertEquals(false, docs.get(0).getField("data3").isStored());
+    assertEquals(false, docs.get(0).getField("data4").isIndexed());
+    assertEquals(false, docs.get(0).getField("data5").isStored());
+    assertEquals(false, docs.get(0).getField("data5").isTokenized());
+    assertEquals(3, docs.get(0).getFields("data6").length);
   }
 
   // Warning conditions
