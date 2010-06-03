@@ -4,6 +4,7 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
 import java.io.ByteArrayInputStream;
+import java.io.File;
 import java.io.InputStream;
 import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
@@ -30,7 +31,7 @@ import org.weborganic.flint.content.ContentFetcher;
 import org.weborganic.flint.content.ContentId;
 import org.weborganic.flint.content.ContentType;
 import org.weborganic.flint.content.DeleteRule;
-import org.weborganic.flint.log.Logger;
+import org.weborganic.flint.log.NoOpListener;
 import org.weborganic.flint.query.CombinedSearchQuery;
 import org.weborganic.flint.query.GenericSearchQuery;
 import org.weborganic.flint.query.SearchResults;
@@ -69,17 +70,6 @@ public class IndexManagerTest {
     public String getRequesterID() {
       return this.id;
     }
-  }
-  
-  private class TestLogger implements Logger {
-    public void info(String info) {System.out.println(info);}
-    public void warn(String warn) {System.out.println(warn);}
-    public void debug(String debug) {System.out.println(debug);}
-    public void error(String err, Throwable t) {System.err.println(err);t.printStackTrace();}
-    public void indexInfo(Requester r, Index i, String info) {System.out.println(info);}
-    public void indexWarn(Requester r, Index i, String warn) {System.out.println(warn);}
-    public void indexDebug(Requester r, Index i, String debug) {System.out.println(debug);}
-    public void indexError(Requester r, Index i, String err, Throwable t) {System.err.println(err);t.printStackTrace();}
   }
   private class TestContentID implements ContentId {
     private final int id;
@@ -159,10 +149,10 @@ public class IndexManagerTest {
         if (id instanceof TestContentID) return new TestContent(id);
         return null;
       }
-    }, new TestLogger());
+    }, NoOpListener.getInstance());
     this.config = new IndexConfig();
-    this.config.addTemplates(DOCUMENT_TYPE, XML_MIME_TYPE, CONFIG, XSLT_PATH);
-    this.config.addTemplates(DOCUMENT_TYPE, XML_MIME_TYPE, CONFIG_2, XSLT_PATH_2);
+    this.config.addTemplates(DOCUMENT_TYPE, XML_MIME_TYPE, CONFIG, new File(XSLT_PATH).toURI());
+    this.config.addTemplates(DOCUMENT_TYPE, XML_MIME_TYPE, CONFIG_2, new File(XSLT_PATH_2).toURI());
   }
   @Test
   public void testindex() throws Exception {
