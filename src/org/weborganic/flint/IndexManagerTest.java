@@ -35,7 +35,7 @@ import org.weborganic.flint.log.NoOpListener;
 import org.weborganic.flint.query.CombinedSearchQuery;
 import org.weborganic.flint.query.GenericSearchQuery;
 import org.weborganic.flint.query.SearchResults;
-import org.weborganic.flint.query.SearchTermParameter;
+import org.weborganic.flint.query.TermParameter;
 
 
 public class IndexManagerTest {
@@ -93,13 +93,14 @@ public class IndexManagerTest {
       super(i);
     }
   }
+
   private class TestContent implements Content {
     private final ContentId id;
     public TestContent(ContentId i) {
       this.id = i;
     }
-    
-    public String getMimeType() {
+
+    public String getMediaType() {
       return XML_MIME_TYPE;
     }
     
@@ -151,9 +152,10 @@ public class IndexManagerTest {
       }
     }, NoOpListener.getInstance());
     this.config = new IndexConfig();
-    this.config.addTemplates(DOCUMENT_TYPE, XML_MIME_TYPE, CONFIG, new File(XSLT_PATH).toURI());
-    this.config.addTemplates(DOCUMENT_TYPE, XML_MIME_TYPE, CONFIG_2, new File(XSLT_PATH_2).toURI());
+    this.config.setTemplates(DOCUMENT_TYPE, XML_MIME_TYPE, CONFIG, new File(XSLT_PATH).toURI());
+    this.config.setTemplates(DOCUMENT_TYPE, XML_MIME_TYPE, CONFIG_2, new File(XSLT_PATH_2).toURI());
   }
+
   @Test
   public void testindex() throws Exception {
     Requester req = new TestRequester(1);
@@ -169,26 +171,27 @@ public class IndexManagerTest {
     assertEquals(0, jobs.size());
     // perform search
     GenericSearchQuery query = new GenericSearchQuery();
-    query.add(new SearchTermParameter("content", "search1"));
+    query.add(new TermParameter("content", "search1"));
     SearchResults results = this.manager.query(index, query);
     assertEquals(1, results.getScoreDoc().length);
     assertEquals("document 1", results.getDocument(results.getScoreDoc()[0].doc).getField("title").stringValue());
     results.terminate();
     // perform search 2
     query = new GenericSearchQuery();
-    query.add(new SearchTermParameter("content", "search2"));
+    query.add(new TermParameter("content", "search2"));
     results = this.manager.query(index, query);
     assertEquals(1, results.getScoreDoc().length);
     assertEquals("document 2", results.getDocument(results.getScoreDoc()[0].doc).getField("title").stringValue());
     results.terminate();
     // perform search 3
     query = new GenericSearchQuery();
-    query.add(new SearchTermParameter("content", "search3"));
+    query.add(new TermParameter("content", "search3"));
     results = this.manager.query(index, query);
     assertEquals(1, results.getScoreDoc().length);
     assertEquals("document 3", results.getDocument(results.getScoreDoc()[0].doc).getField("title").stringValue());
     results.terminate();
   }
+
   @Test
   public void testAddMultipleToIndex() throws Exception {
     Requester req = new TestRequester(1);
@@ -202,13 +205,14 @@ public class IndexManagerTest {
     // perform search 3
     GenericSearchQuery query = new GenericSearchQuery();
     String pname = XSLT_PARAMS_2.keySet().iterator().next();
-    query.add(new SearchTermParameter(pname, XSLT_PARAMS_2.get(pname)));
+    query.add(new TermParameter(pname, XSLT_PARAMS_2.get(pname)));
     SearchResults results = this.manager.query(index, query);
     assertEquals(2, results.getScoreDoc().length);
     assertEquals("author7", results.getDocument(results.getScoreDoc()[0].doc).getField("author").stringValue());
     assertEquals("author7 number 2", results.getDocument(results.getScoreDoc()[1].doc).getField("author").stringValue());
     results.terminate();
   }
+
   @Test
   public void testCheckStatus() throws Exception {
     Requester req = new TestRequester(1);
@@ -242,6 +246,7 @@ public class IndexManagerTest {
     jobs = this.manager.getStatus(req);
     assertTrue(jobs.size() > 1);
   }
+
   @Test
   public void testCheckErrors() throws Exception {
     Requester req = new TestRequester(1);
@@ -269,6 +274,7 @@ public class IndexManagerTest {
 //    assertNotNull(errors.get(0).getErrorMessage());
 //    assertTrue(errors.get(0).getErrorMessage().startsWith("Failed to create Index XML from Source content"));
   }
+
   @Test
   public void testConcurrentindex() throws Exception {
     // ok start the manager now
@@ -305,26 +311,27 @@ public class IndexManagerTest {
     assertEquals(0, jobs.size());
     // perform search
     GenericSearchQuery query = new GenericSearchQuery();
-    query.add(new SearchTermParameter("content", "search1"));
+    query.add(new TermParameter("content", "search1"));
     SearchResults results = this.manager.query(index, query);
     assertEquals(1, results.getScoreDoc().length);
     assertEquals("document 1", results.getDocument(results.getScoreDoc()[0].doc).getField("title").stringValue());
     results.terminate();
     // perform search 2
     query = new GenericSearchQuery();
-    query.add(new SearchTermParameter("content", "search2"));
+    query.add(new TermParameter("content", "search2"));
     results = this.manager.query(index, query);
     assertEquals(1, results.getScoreDoc().length);
     assertEquals("document 2", results.getDocument(results.getScoreDoc()[0].doc).getField("title").stringValue());
     results.terminate();
     // perform search 3
     query = new GenericSearchQuery();
-    query.add(new SearchTermParameter("content", "search3"));
+    query.add(new TermParameter("content", "search3"));
     results = this.manager.query(index, query);
     assertEquals(1, results.getScoreDoc().length);
     assertEquals("document 3", results.getDocument(results.getScoreDoc()[0].doc).getField("title").stringValue());
     results.terminate();
   }
+
   @Test
   public void testSort() throws Exception {
     // ok start the manager now
@@ -339,7 +346,7 @@ public class IndexManagerTest {
     assertEquals(0, jobs.size());
     // perform search
     GenericSearchQuery query = new GenericSearchQuery();
-    query.add(new SearchTermParameter("title", "document"));
+    query.add(new TermParameter("title", "document"));
     // sort by field named 'sort'
     query.setSort(new Sort(new SortField("sort", SortField.STRING)));
     SearchResults results = this.manager.query(index, query);
@@ -369,7 +376,7 @@ public class IndexManagerTest {
     assertEquals(0, this.manager.getStatus(this.index).size());
     // perform search
     GenericSearchQuery query = new GenericSearchQuery();
-    query.add(new SearchTermParameter("content", "search1"));
+    query.add(new TermParameter("content", "search1"));
     SearchResults results = this.manager.query(index, query);
     assertEquals(0, results.getScoreDoc().length);
     results.terminate();
@@ -384,7 +391,7 @@ public class IndexManagerTest {
     Thread.sleep(400);
     // perform search
     GenericSearchQuery query = new GenericSearchQuery();
-    query.add(new SearchTermParameter("data", "data1"));
+    query.add(new TermParameter("data", "data1"));
     SearchResults results = this.manager.query(index, query);
     assertEquals(1, results.getScoreDoc().length);
     assertEquals("document 1", results.getDocument(results.getScoreDoc()[0].doc).getField("title").stringValue());
@@ -399,7 +406,7 @@ public class IndexManagerTest {
     assertEquals(0, this.manager.getStatus(this.index).size());
     // perform search 2
     query = new GenericSearchQuery();
-    query.add(new SearchTermParameter("content", "search1"));
+    query.add(new TermParameter("content", "search1"));
     results = this.manager.query(index, query);
     assertEquals(1, results.getScoreDoc().length);
     assertEquals("updated1", results.getDocument(results.getScoreDoc()[0].doc).getField("data").stringValue());
@@ -419,9 +426,9 @@ public class IndexManagerTest {
     assertEquals(0, jobs.size());
     // perform search
     GenericSearchQuery query1 = new GenericSearchQuery();
-    query1.add(new SearchTermParameter("content", "search1"));
+    query1.add(new TermParameter("content", "search1"));
     GenericSearchQuery query4 = new GenericSearchQuery();
-    query4.add(new SearchTermParameter("content", "search4"));
+    query4.add(new TermParameter("content", "search4"));
     CombinedSearchQuery combined = new CombinedSearchQuery(query1, query4, null);
     SearchResults results = this.manager.query(index, combined);
     // make sure the order is correct
@@ -441,7 +448,7 @@ public class IndexManagerTest {
     Thread.sleep(400);
     // perform search
     GenericSearchQuery query = new GenericSearchQuery();
-    query.add(new SearchTermParameter("data", "data1"));
+    query.add(new TermParameter("data", "data1"));
     SearchResults results1 = this.manager.query(index, query);
     assertEquals(1, results1.getScoreDoc().length);
     assertEquals("document 1", results1.getDocument(results1.getScoreDoc()[0].doc).getField("title").stringValue());
@@ -455,7 +462,7 @@ public class IndexManagerTest {
     assertEquals(0, this.manager.getStatus(this.index).size());
     // perform search 2
     query = new GenericSearchQuery();
-    query.add(new SearchTermParameter("content", "search1"));
+    query.add(new TermParameter("content", "search1"));
     SearchResults results2 = this.manager.query(index, query);
     assertEquals(1, results2.getScoreDoc().length);
     assertEquals("updated1", results2.getDocument(results2.getScoreDoc()[0].doc).getField("data").stringValue());
