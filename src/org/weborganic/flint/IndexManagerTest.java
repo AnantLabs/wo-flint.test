@@ -32,8 +32,8 @@ import org.weborganic.flint.content.ContentId;
 import org.weborganic.flint.content.ContentType;
 import org.weborganic.flint.content.DeleteRule;
 import org.weborganic.flint.log.NoOpListener;
-import org.weborganic.flint.query.CombinedSearchQuery;
 import org.weborganic.flint.query.GenericSearchQuery;
+import org.weborganic.flint.query.PredicateSearchQuery;
 import org.weborganic.flint.query.SearchResults;
 import org.weborganic.flint.query.TermParameter;
 
@@ -425,11 +425,7 @@ public class IndexManagerTest {
     List<IndexJob> jobs = this.manager.getStatus(this.index);
     assertEquals(0, jobs.size());
     // perform search
-    GenericSearchQuery query1 = new GenericSearchQuery();
-    query1.add(new TermParameter("content", "search1"));
-    GenericSearchQuery query4 = new GenericSearchQuery();
-    query4.add(new TermParameter("content", "search4"));
-    CombinedSearchQuery combined = new CombinedSearchQuery(query1, query4, null);
+    PredicateSearchQuery combined = new PredicateSearchQuery("+content:search1 +content:search2");
     SearchResults results = this.manager.query(index, combined);
     // make sure the order is correct
     assertEquals(2, results.getScoreDoc().length);
