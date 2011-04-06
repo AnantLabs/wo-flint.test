@@ -70,7 +70,7 @@ public class IndexIOReadWriteTest {
 
   @Test
   public void testIndexes() throws Exception {
-    IndexReaderManager.setMaxOpenedIndexes(5);
+    OpenIndexManager.setMaxOpenedIndexes(5);
     int nbOfIndexes = 10;
     int docsInIndex = 10 * 100;
     int fieldsInDoc = 10;
@@ -93,7 +93,7 @@ public class IndexIOReadWriteTest {
       }
     }
     // close half of them
-    IndexReaderManager.closeOldReaders();
+    OpenIndexManager.closeOldReaders();
     // searching now, it should re-create a reader for the ones that were closed
     for (IndexIO io : indexes) {
       // ok now check that they are there
